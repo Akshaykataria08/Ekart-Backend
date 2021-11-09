@@ -1,0 +1,17 @@
+server:
+ port: 8004
+
+spring:
+ datasource:
+  url: jdbc:oracle:thin:@localhost:1521:xe
+  username: system
+  password: Akki0808
+  driver-class-name: oracle.jdbc.driver.OracleDriver
+  hikari:
+   connection-timeout: 60000
+   maximum-pool-size: 5
+
+ jpa:
+  hibernate:
+   ddl-auto: create
+
