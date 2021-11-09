@@ -1,0 +1,33 @@
+server:
+ port: 8005
+
+spring:
+ datasource:
+  url: jdbc:oracle:thin:@localhost:1521:xe
+  username: system
+  password: Akki0808
+  driver-class-name: oracle.jdbc.driver.OracleDriver
+  hikari:
+   connection-timeout: 60000
+   maximum-pool-size: 5
+ jpa:
+  hibernate:
+   ddl-auto: create
+
+zuul:
+ routes:
+  cartService:
+   path: /cart/**
+   url: http://localhost:8003/cart
+  productService:
+   path: /products/**
+   url: http://localhost:8002/products
+  userService:
+   path: /users/**
+   url: http://localhost:8001/users
+  couponService:
+   path: /coupon/**
+   url: http://localhost:8004/coupon
+       
+# main:
+#  allow-bean-definition-overriding: true
