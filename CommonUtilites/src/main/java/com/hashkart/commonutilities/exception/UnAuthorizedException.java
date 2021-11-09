@@ -1,6 +1,6 @@
 package com.hashkart.commonutilities.exception;
 
-public class UnAuthorizedException extends Exception {
+public class UnAuthorizedException extends RuntimeException {
 
 	/**
 	 * 
