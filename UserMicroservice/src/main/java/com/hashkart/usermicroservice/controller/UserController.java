@@ -1,5 +1,7 @@
 package com.hashkart.usermicroservice.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hashkart.commonutilities.response.GenericApiResponse;
 import com.hashkart.usermicroservice.domain.UserProfile;
-import com.hashkart.usermicroservice.response.UserListResponse;
 import com.hashkart.usermicroservice.service.UserService;
 
 @RestController
@@ -31,9 +32,9 @@ public class UserController {
 	
 	@GetMapping("/profile")
 	@ResponseStatus(code = HttpStatus.OK)
-	public GenericApiResponse<UserListResponse> getAllUserProfiles() {
-		GenericApiResponse<UserListResponse> response = new GenericApiResponse<UserListResponse>();
-		response.setData(userService.getAllProfiles());
+	public GenericApiResponse<UserProfile> getUserProfile(HttpServletRequest request) {
+		GenericApiResponse<UserProfile> response = new GenericApiResponse<UserProfile>();
+		response.setData(userService.getProfile(request.getHeader("userId")));
 		return response;
 	}
 }
