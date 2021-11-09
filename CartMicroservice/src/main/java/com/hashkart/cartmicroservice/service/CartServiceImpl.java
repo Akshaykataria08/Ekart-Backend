@@ -139,15 +139,6 @@ public class CartServiceImpl implements CartService {
 				}).getData().getCouponDiscount();
 	}
 
-//	private GenericApiResponse<ProductListResponse> updateInventory(Map<Long, Integer> productQuantities) {
-//		String url = UriComponentsBuilder.fromHttpUrl(PRODUCT_MICROSERVICE + BULK_PRODUCTS_PATH).build().toUri()
-//				.toString();
-//		JsonNode jsonResponse = httpService.put(url, productQuantities, JsonNode.class);
-//		return objectMapper.convertValue(jsonResponse,
-//				new TypeReference<GenericApiResponse<ProductListResponse>>() {
-//				});
-//	}
-
 	private Cart getCartOrThrowException(String cartId) throws ResourceNotFoundException {
 		return cartRepo.findById(cartId)
 				.orElseThrow(() -> new ResourceNotFoundException("No Cart has been created for id " + cartId));

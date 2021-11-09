@@ -1,5 +1,7 @@
 package com.hashkart.cartmicroservice.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,6 +26,8 @@ public class CartController {
 
 	@Autowired
 	private CartService cartService;
+	
+	private static final String CART_ID = "userId";
 
 	@PostMapping("/{cartId}")
 	@ResponseStatus(code = HttpStatus.CREATED)
@@ -33,45 +37,45 @@ public class CartController {
 		return response;
 	}
 
-	@PostMapping("/{cartId}/products/{productId}")
+	@PostMapping("/products/{productId}")
 	@ResponseStatus(code = HttpStatus.OK)
-	public GenericApiResponse<CartItemsResponse> addProductItem(@PathVariable String cartId, @PathVariable Long productId) {
+	public GenericApiResponse<CartItemsResponse> addProductItem(HttpServletRequest request, @PathVariable Long productId) {
 		GenericApiResponse<CartItemsResponse> response = new GenericApiResponse<CartItemsResponse>();
-		response.setData(cartService.addProductToCart(cartId, productId));
+		response.setData(cartService.addProductToCart(request.getHeader(CART_ID), productId));
 		return response;
 	}
 	
-	@PutMapping("/{cartId}/products/{productId}/quantity/{quantity}")
+	@PutMapping("/products/{productId}/quantity/{quantity}")
 	@ResponseStatus(code = HttpStatus.OK)
-	public GenericApiResponse<CartItemsResponse> updateProductQuantity(@PathVariable String cartId, @PathVariable Long productId,
+	public GenericApiResponse<CartItemsResponse> updateProductQuantity(HttpServletRequest request, @PathVariable Long productId,
 			@PathVariable Integer quantity) {
 		GenericApiResponse<CartItemsResponse> response = new GenericApiResponse<CartItemsResponse>();
-		response.setData(cartService.updateProductQuantity(cartId, productId, quantity));
+		response.setData(cartService.updateProductQuantity(request.getHeader(CART_ID), productId, quantity));
 		return response;
 	}
 
-	@DeleteMapping("/{cartId}/products/{productId}")
+	@DeleteMapping("/products/{productId}")
 	@ResponseStatus(code = HttpStatus.OK)
-	public GenericApiResponse<CartItemsResponse> deleteProductItem(@PathVariable String cartId, @PathVariable Long productId) {
+	public GenericApiResponse<CartItemsResponse> deleteProductItem(HttpServletRequest request, @PathVariable Long productId) {
 		GenericApiResponse<CartItemsResponse> response = new GenericApiResponse<CartItemsResponse>();
-		response.setData(cartService.removeProductFromCart(cartId, productId));
+		response.setData(cartService.removeProductFromCart(request.getHeader(CART_ID), productId));
 		return response;
 	}
 
-	@GetMapping("/{cartId}/products")
+	@GetMapping("/products")
 	@ResponseStatus(code = HttpStatus.OK)
-	public GenericApiResponse<CartItemsResponse> getCartItems(@PathVariable String cartId) {
+	public GenericApiResponse<CartItemsResponse> getCartItems(HttpServletRequest request) {
 		GenericApiResponse<CartItemsResponse> response = new GenericApiResponse<CartItemsResponse>();
-		response.setData(cartService.getCartItems(cartId));
+		response.setData(cartService.getCartItems(request.getHeader(CART_ID)));
 		return response;
 	}
 
 //	Later lock the products in the cart
-	@PostMapping("/{cartId}/checkout")
-	public GenericApiResponse<CartItemsResponse> checkoutCart(@PathVariable String cartId, @RequestBody(required = false) CheckoutDetailsRequest request) {
-		String couponId = request != null ? request.getCouponId(): null;
+	@PostMapping("/checkout")
+	public GenericApiResponse<CartItemsResponse> checkoutCart(HttpServletRequest request, @RequestBody(required = false) CheckoutDetailsRequest checkoutDetailsRequest) {
+		String couponId = checkoutDetailsRequest != null ? checkoutDetailsRequest.getCouponId(): null;
 		GenericApiResponse<CartItemsResponse> response = new GenericApiResponse<CartItemsResponse>();
-		response.setData(cartService.checkoutCart(cartId, couponId));
+		response.setData(cartService.checkoutCart(request.getHeader(CART_ID), couponId));
 		return response;
 	}
 }
