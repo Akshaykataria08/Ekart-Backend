@@ -70,7 +70,11 @@ public class ProductServiceImpl implements ProductService {
 
 	private Product updateProductQuantity(Product product, Product productFromDB) {
 		if (product.getQuantity() != null) {
-			productFromDB.setQuantity(productFromDB.getQuantity() - product.getQuantity());
+			int newQuantity = productFromDB.getQuantity() - product.getQuantity();
+			if(newQuantity < 0) {
+				throw new ResourceNotFoundException("Request quantity of the following products is greater than stock quantity: " + productFromDB.getProductId());
+			}
+			productFromDB.setQuantity(newQuantity);
 		}
 		return productFromDB;
 	}

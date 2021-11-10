@@ -61,8 +61,6 @@ public class CartServiceImpl implements CartService {
 		cart.getProductQuantities().put(productId, 1);
 		updateProductInInventory(productId, 1, 0);
 		CartItemsResponse response = getCartItems(cart);
-		cart.getProductQuantities().entrySet()
-				.removeIf(entry -> !response.getProducts().contains(new ProductResponse(entry.getKey())));
 		cartRepo.save(cart);
 		return response;
 	}
@@ -103,6 +101,7 @@ public class CartServiceImpl implements CartService {
 	public CartItemsResponse checkoutCart(String cartId, String couponId) {
 		Cart cart = this.getCartOrThrowException(cartId);
 		CartItemsResponse response = getCartItems(cart);
+//		validateProductsInStock(response.getProducts());
 		Integer couponDiscount = getCouponDiscount(couponId);
 		double cartTotal = calculateCartTotal(response.getProducts(),
 				defaultDiscountConfig.getThresholdQuantity(), defaultDiscountConfig.getDefaultDiscount());
@@ -148,10 +147,12 @@ public class CartServiceImpl implements CartService {
 		Set<Long> productIds = cart.getProductQuantities().keySet();
 		List<ProductResponse> products = fetchProductsByIds(productIds);
 		populateRequestedQuantity(products, cart.getProductQuantities());
-		validateProductsInStock(products);
 		double cartTotal = calculateCartTotal(products, defaultDiscountConfig.getThresholdQuantity(),
 				defaultDiscountConfig.getDefaultDiscount());
-		return new CartItemsResponse(cart.getCartId(), products, cartTotal, cart.getCouponDiscount(), calculateDiscountPrice(cartTotal, cart.getCouponDiscount()));
+		CartItemsResponse response = new CartItemsResponse(cart.getCartId(), products, cartTotal, cart.getCouponDiscount(), calculateDiscountPrice(cartTotal, cart.getCouponDiscount()));
+		cart.getProductQuantities().entrySet()
+		.removeIf(entry -> !response.getProducts().contains(new ProductResponse(entry.getKey())));
+		return response;
 	}
 
 	private List<ProductResponse> fetchProductsByIds(Set<Long> productIds) {
