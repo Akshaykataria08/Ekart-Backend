@@ -9,11 +9,13 @@ import com.hashkart.apigateway.request.SignUpRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"password"})
 public class UserCredentials {
 
 	@Id

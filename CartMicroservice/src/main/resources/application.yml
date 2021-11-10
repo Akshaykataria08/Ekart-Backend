@@ -18,6 +18,10 @@ spring:
 
  jpa:
   hibernate:
-   ddl-auto: create
+   ddl-auto: update
+   
+logging:
+ level:
+  com.hashkart.cartmicroservice: DEBUG
 
 
