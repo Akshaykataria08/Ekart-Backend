@@ -4,7 +4,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -101,7 +100,6 @@ public class CartServiceImpl implements CartService {
 	public CartItemsResponse checkoutCart(String cartId, String couponId) {
 		Cart cart = this.getCartOrThrowException(cartId);
 		CartItemsResponse response = getCartItems(cart);
-//		validateProductsInStock(response.getProducts());
 		Integer couponDiscount = getCouponDiscount(couponId);
 		double cartTotal = calculateCartTotal(response.getProducts(),
 				defaultDiscountConfig.getThresholdQuantity(), defaultDiscountConfig.getDefaultDiscount());
@@ -183,15 +181,6 @@ public class CartServiceImpl implements CartService {
 
 	private double calculateDiscountPrice(Double price, Integer defaultDiscount) {
 		return (100 - defaultDiscount) * price / 100;
-	}
-
-	private void validateProductsInStock(List<ProductResponse> products) {
-		String str = products.stream().filter(product -> product.getRequestedQuantity() > product.getQuantity())
-				.map(product -> String.valueOf(product.getProductId())).collect(Collectors.joining(","));
-
-		if (str.length() != 0) {
-			throw new ResourceNotFoundException("Product with following IDs are not available:" + str);
-		}
 	}
 
 	private void populateRequestedQuantity(List<ProductResponse> products, Map<Long, Integer> productQuantities) {
