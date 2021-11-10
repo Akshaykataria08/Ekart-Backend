@@ -33,6 +33,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.and()
 			.csrf().disable()
 			.authorizeRequests()
+			.antMatchers(HttpMethod.POST, "/cart/checkout").hasRole("USER")
 			.antMatchers(HttpMethod.POST, "/cart/*").hasRole("API")
 			.antMatchers("/cart/**").hasRole("USER")
 			.antMatchers(HttpMethod.GET, "/coupon/**").hasRole("USER")
