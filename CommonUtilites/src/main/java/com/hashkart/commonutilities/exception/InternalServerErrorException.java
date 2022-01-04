@@ -1,6 +1,6 @@
 package com.hashkart.commonutilities.exception;
 
-public class InternalServerErrorException extends Exception {
+public class InternalServerErrorException extends RuntimeException {
 
 	/**
 	 * 

@@ -1,6 +1,6 @@
 package com.hashkart.commonutilities.exception;
 
-public class BadCredentialsException extends Exception {
+public class BadCredentialsException extends RuntimeException {
 
 	/**
 	 * 

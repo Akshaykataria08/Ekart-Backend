@@ -23,7 +23,7 @@ import com.hashkart.commonutilities.response.GenericApiResponse;
 @RestController
 @RequestMapping("/cart")
 public class CartController {
-
+	
 	@Autowired
 	private CartService cartService;
 	
@@ -31,9 +31,9 @@ public class CartController {
 
 	@PostMapping("/{cartId}")
 	@ResponseStatus(code = HttpStatus.CREATED)
-	private GenericApiResponse<Cart> creatCart(@PathVariable String cartId) {
+	public GenericApiResponse<Cart> creatCart(@PathVariable String cartId, HttpServletRequest request) {
 		GenericApiResponse<Cart> response = new GenericApiResponse<>();
-		response.setData(cartService.createCart(cartId));
+		cartService.createCart(cartId);
 		return response;
 	}
 

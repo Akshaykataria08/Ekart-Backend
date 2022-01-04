@@ -19,7 +19,7 @@ public class UserProfileRequest implements Request {
 	private String lastName;
 	
 	public UserProfileRequest(SignUpRequest request) {
-		this.userId = request.getUserName();
+		this.userId = request.getUsername();
 		this.firstName = request.getFirstName();
 		this.lastName = request.getLastName();
 	}

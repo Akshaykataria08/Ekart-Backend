@@ -3,9 +3,12 @@ package com.hashkart.cartmicroservice.service;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -24,6 +27,7 @@ import com.hashkart.commonutilities.exception.ResourceAlreadyExistsException;
 import com.hashkart.commonutilities.exception.ResourceNotFoundException;
 import com.hashkart.commonutilities.response.GenericApiResponse;
 
+@RefreshScope
 @Service
 public class CartServiceImpl implements CartService {
 
@@ -39,14 +43,20 @@ public class CartServiceImpl implements CartService {
 	@Autowired
 	private HttpConnectorService httpService;
 
-	private static final String PRODUCT_MICROSERVICE = "http://localhost:8002";
-	private static final String BULK_PRODUCTS_PATH = "/products/bulk";
-	private static final String COUPON_MICROSERVICE = "http://localhost:8004";
-	private static final String GET_COUPON_PATH = "/coupon";
-	private static final String UPDATE_PRODUCT_QUANTITY_PATH = "/products";
+	@Value("${productServiceUrl}")
+	private String PRODUCT_MICROSERVICE;
+	@Value("${productServiceBasePath}")
+	private String UPDATE_PRODUCT_QUANTITY_PATH;
+	@Value("${productServiceBulkUpdatePath}")
+	private String BULK_PRODUCTS_PATH;
+	@Value("${couponServiceUrl}")
+	private String COUPON_MICROSERVICE;
+	@Value("${couponServicePath}")
+	private String GET_COUPON_PATH;
 
 	@Override
 	public Cart createCart(String cartId) throws ResourceAlreadyExistsException {
+		System.out.println("Create Cart called.");
 		if (cartRepo.existsById(cartId)) {
 			throw new ResourceAlreadyExistsException("Cart for Id " + cartId + " already exists");
 		}
@@ -57,8 +67,9 @@ public class CartServiceImpl implements CartService {
 	public CartItemsResponse addProductToCart(String cartId, Long productId) throws ResourceNotFoundException {
 		Cart cart = this.getCartOrThrowException(cartId);
 		cart.setCheckout(false);
-		cart.getProductQuantities().put(productId, 1);
-		updateProductInInventory(productId, 1, 0);
+		Optional<Integer> productQuantity = Optional.ofNullable(cart.getProductQuantities().get(productId));
+		updateProductInInventory(productId, productQuantity.orElse(0)+1, productQuantity.orElse(0));
+		cart.getProductQuantities().put(productId, productQuantity.orElse(0) + 1);
 		CartItemsResponse response = getCartItems(cart);
 		cartRepo.save(cart);
 		return response;

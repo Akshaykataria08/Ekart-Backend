@@ -24,12 +24,12 @@ public class UserCredentials {
 	private String roles;
 	
 	public UserCredentials(LoginRequest request) {
-		this.userName = request.getUserName();
+		this.userName = request.getUsername();
 		this.password = request.getPassword();
 	}
 	
 	public UserCredentials(SignUpRequest request) {
-		this.userName = request.getUserName();
+		this.userName = request.getUsername();
 		this.password = request.getPassword();
 		this.roles = request.getRoles();
 	}

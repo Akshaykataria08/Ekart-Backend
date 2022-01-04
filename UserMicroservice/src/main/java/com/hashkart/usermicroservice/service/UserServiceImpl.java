@@ -1,6 +1,8 @@
 package com.hashkart.usermicroservice.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -9,9 +11,9 @@ import com.hashkart.commonutilities.exception.ResourceAlreadyExistsException;
 import com.hashkart.commonutilities.exception.ResourceNotFoundException;
 import com.hashkart.usermicroservice.dao.UserRepository;
 import com.hashkart.usermicroservice.domain.UserProfile;
-import com.hashkart.usermicroservice.response.UserListResponse;
 
 @Service
+@RefreshScope
 public class UserServiceImpl implements UserService {
 
 	@Autowired
@@ -19,9 +21,12 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private HttpConnectorService httpService;
-
-	private static final String CART_MICROSERVICE = "http://localhost:8003";
-	private static final String CART_CREATION_PATH = "/cart";
+	
+	@Value("${cartServiceUrl}")
+	private String CART_MICROSERVICE;
+	@Value("${cartServicePath}")
+	private String CART_CREATION_PATH;
+	
 	private static final String USER_ALREADY_EXISTS_MSG = "User with Email id %s already exists";
 	private static final String USER_DOESNT_EXISTS_MSG = "User with Email id %s doesn't exists";
 

@@ -1,0 +1,12 @@
+spring:
+ cloud:
+  config:
+   name: coupon-microservice
+   discovery:
+    service-id: config
+    enabled: true
+    
+eureka:
+ client:
+  serviceUrl:
+   defaultZone: http://localhost:9000/eureka/

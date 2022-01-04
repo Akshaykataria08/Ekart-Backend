@@ -14,6 +14,6 @@ import lombok.ToString;
 @ToString(exclude = {"password"})
 public class LoginRequest implements Request {
 
-	private String userName;
+	private String username;
 	private String password;
 }
