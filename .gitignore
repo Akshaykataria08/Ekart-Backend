@@ -2,6 +2,7 @@
 
 HELP.md
 # compiled output
+**/target
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
@@ -37,6 +38,6 @@ HELP.md
 **/Thumbs.db
 
 /.metadata/
-CommonUtilites/.settings/org.eclipse.jdt.apt.core.prefs
-*.class
-*.class
+**/.settings
+**/*.class
+**/*.MF
