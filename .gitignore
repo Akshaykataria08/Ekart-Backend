@@ -37,3 +37,6 @@ HELP.md
 **/Thumbs.db
 
 /.metadata/
+CommonUtilites/.settings/org.eclipse.jdt.apt.core.prefs
+*.class
+*.class
