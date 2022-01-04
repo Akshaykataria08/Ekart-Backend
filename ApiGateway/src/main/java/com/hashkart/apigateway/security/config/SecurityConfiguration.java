@@ -61,7 +61,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.csrf().disable()
 			.authorizeRequests()
 			.antMatchers("/auth/**", "/actuator/**").permitAll()
-			.antMatchers(HttpMethod.GET, "/swagger-ui/**", "/v2/api-docs").permitAll()
+			.antMatchers(HttpMethod.GET,
+					"/swagger*/**",
+					"/v2/api-docs",
+					"/",
+					"/webjars/**",
+					"/favicon.ico",
+                    "/**/*.html",
+                    "/**/*.css",
+                    "/**/*.js")
+				.permitAll()
 			.antMatchers(HttpMethod.GET, "/products", "/products/**").permitAll()
 			.antMatchers("/cart/**").hasRole("USER")
 			.antMatchers(HttpMethod.GET, "/coupon/**").hasRole("USER")
