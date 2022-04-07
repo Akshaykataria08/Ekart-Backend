@@ -41,3 +41,6 @@ HELP.md
 **/.settings
 **/*.class
 **/*.MF
+CommonUtilites/.factorypath
+CommonUtilites/.settings/org.eclipse.jdt.apt.core.prefs
+CommonUtilites/target/
